@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients - Lab Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            padding: 40px;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .nested-table {
+            width: 100%;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .nested-table th {
+            background-color: #6c757d;
+            color: white;
+            font-size: 14px;
+        }
+
+        .nested-table td {
+            font-size: 14px;
+            background-color: #fff;
+        }
+
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            padding: 12px;
+            text-align: center;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Patients List</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Username</th>
+            <th>Medical Records</th>
+        </tr>
+        {% for patient in patients %}
+        <tr>
+            <td>{{ patient.id }}</td>
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.age }}</td>
+            <td>{{ patient.gender }}</td>
+            <td>{{ patient.contact }}</td>
+            <td>{{ patient.username }}</td>
+            <td>
+                {% if medical_data[patient.id] %}
+                <table class="nested-table">
+                    <thead>
+                        <tr>
+                            <th>Record ID</th>
+                            <th>Upload Date</th>
+                            <th>Scan & Report</th>
+                            <th>Normal Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in medical_data[patient.id] %}
+                        <tr>
+                            <td>{{ record.id }}</td>
+                            <td>{{ record.upload_date }}</td>
+                            <td>
+                                {% if record.scan_and_report %}
+                                    <a href="{{ record.scan_and_report }}" target="_blank">View</a>
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if record.normal_report %}
+                                    <a href="{{ record.normal_report }}" target="_blank">View</a>
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <em>No medical records found.</em>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/labadmin" class="back-btn">← Back to Dashboard</a>
+
+</body>
+</html>
